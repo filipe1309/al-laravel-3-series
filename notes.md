@@ -1,0 +1,20 @@
+# DevOnTheRun Notes
+
+> notes taken during the course
+
+<!-- https://gitignore.io -->
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-set-up-laravel-with-docker-compose-on-ubuntu-20-04
+
+```sh
+docker-compose exec app php artisan key:generate
+docker-compose exec app php artisan config:cache
+
+docker-compose exec db bash
+mysql -u root -p
+GRANT ALL ON laravel.* TO 'laraveluser'@'%' IDENTIFIED BY 'your_laravel_db_password';
+FLUSH PRIVILEGES;
+EXIT;
+
+docker-compose exec app php artisan migrate
+```
