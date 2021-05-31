@@ -1,0 +1,68 @@
+version: "3"
+
+services:
+  #PHP Service
+  app:
+    build: .docker/app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+      APP_ENV: ${APP_ENV}
+      APP_DEBUG: ${APP_DEBUG}
+      APP_KEY: ${APP_KEY}
+      APP_LOCALE: en
+      APP_FALLBACK_LOCALE: en
+      DB_CONNECTION: ${DB_CONNECTION}
+      DB_HOST: ${DB_HOST}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      #- /var/www/vendor
+    depends_on:
+      - db
+
+  #Nginx Service
+  webserver:
+    build: .docker/webserver
+    restart: unless-stopped
+    command: nginx -g "daemon off;"
+    tty: true
+    ports:
+      - 5002:80
+      - 5003:443
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - app
+
+  #MySQL Service
+  db:
+    image: mysql:5.7.22
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 3306:3306
+    environment:
+      SERVICE_TAGS: dev
+      SERVICE_NAME: db
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - .docker/db/dbdata:/var/lib/mysq
+
+  #Redis Service
+  redis:
+    image: redis:3.2-alpine
+    ports:
+      - 6381:6379
+    deploy:
+      resources:
+        limits:
+          memory: 1g
