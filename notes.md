@@ -22,3 +22,11 @@ docker-compose exec app php artisan make:seeder UserSeeder
 docker-compose exec app php artisan db:seed
 
 ```
+
+## Class 1
+
+```sh
+docker-compose exec app php artisan make:mail NovaSerie
+```
+
+http://localhost:5002/visualizando-email
