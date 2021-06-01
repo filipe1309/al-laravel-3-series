@@ -38,6 +38,16 @@ class SeriesController extends Controller
             $request->ep_por_temporada
         );
 
+        $email = new \App\Mail\NovaSerie(
+            $request->nome,
+            $request->qtd_temporadas,
+            $request->ep_por_temporada
+        );
+
+        $email->subject = 'Nova Serie Adicionada!';
+
+        \Illuminate\Support\Facades\Mail::to($request->user())->send($email);
+
         $request->session()
             ->flash(
                 'mensagem',
