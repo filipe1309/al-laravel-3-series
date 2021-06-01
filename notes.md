@@ -17,4 +17,8 @@ FLUSH PRIVILEGES;
 EXIT;
 
 docker-compose exec app php artisan migrate
+
+docker-compose exec app php artisan make:seeder UserSeeder
+docker-compose exec app php artisan db:seed
+
 ```
