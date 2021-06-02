@@ -48,7 +48,7 @@ docker-compose exec app php artisan config:cache
 docker-compose up
 ```
 
-> Access http://localhost:5002
+> Access http://localhost:5002/series
 
 ## License
 

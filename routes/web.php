@@ -42,7 +42,19 @@ Route::get('/sair', function () {
     return redirect('/entrar');
 });
 
-
 Route::get('/visualizando-email', function () {
     return new \App\Mail\NovaSerie('The Office', 10, 20);
+});
+
+Route::get('/enviando-email', function () {
+    $email = new \App\Mail\NovaSerie('The Office', 10, 20);
+
+    $email->subject = 'Nova Serie Adicionada!';
+
+    $user = (object) [
+        'email' => 'testerson@test.com',
+        'name' => 'Testerson'
+    ];
+    \Illuminate\Support\Facades\Mail::to($user)->send($email);
+    return 'Email enviado!';
 });
