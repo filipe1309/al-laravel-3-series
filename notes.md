@@ -2,7 +2,7 @@
 
 > notes taken during the course
 
-<!-- https://gitignore.io -->
+http://localhost:5002/series
 
 https://www.digitalocean.com/community/tutorials/how-to-install-and-set-up-laravel-with-docker-compose-on-ubuntu-20-04
 
@@ -30,3 +30,11 @@ docker-compose exec app php artisan make:mail NovaSerie
 ```
 
 http://localhost:5002/visualizando-email
+
+## Class 2
+
+http://localhost:5002/enviando-email
+
+```sh
+docker-compose exec app php artisan migrate:fresh
+```
