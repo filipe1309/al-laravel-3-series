@@ -38,3 +38,32 @@ http://localhost:5002/enviando-email
 ```sh
 docker-compose exec app php artisan migrate:fresh
 ```
+
+## Class 3
+
+```sh
+# SQS
+docker-compose exec app php artisan queue:table
+
+# DLQ
+docker-compose exec app php artisan queue:failed-table
+
+docker-compose exec app php artisan migrate
+```
+
+```sh
+docker-compose exec app php artisan tinker
+>>> \DB::select('SELECT * FROM jobs');
+
+-> docker-compose exec app php artisan queue:listen --tries=1
+
+>>> \DB::select('SELECT * FROM failed_jobs');
+
+docker-compose exec app php artisan queue:failed
+
+# Envia da tabela failed_jobs para jobs
+# queue:retry ID do job
+docker-compose exec app php artisan queue:retry 1
+
+docker-compose exec app php artisan queue:listen --tries=2 --delay=5
+```
