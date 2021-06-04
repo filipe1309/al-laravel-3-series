@@ -14,16 +14,24 @@ TAG_NAME=$(echo "$GIT_BRANCH" | tr -d -)
 
 
 confirm() {
+    read -r -p "Are you sure? [Y/n] " response
+    response=${response,,} # tolower
+    if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+        echo "FOI"
+    else
+        exit 0;
+    fi
+
     # call with a prompt string or use a default
-    read -r -p "${1:-Are you sure? [y/N]} " response
-    case "$response" in
-        [yY][eE][sS]|[yY]) 
-            true
-            ;;
-        *)
-            false
-            ;;
-    esac
+    # read -r -p "${1:-Are you sure? [Y/n]} " response
+    # case "$response" in
+    #     [yY][eE][sS]|[yY][\n][]) 
+    #         true
+    #         ;;
+    #     *)
+    #         false
+    #         ;;
+    # esac
 }
 
 echo "Deploying branch: $GIT_BRANCH ..."
@@ -31,15 +39,26 @@ echo "Deploying branch: $GIT_BRANCH ..."
 
 # if arguments [ $# -eq 0 ]
 if [ $# -eq 0 ]; then
-    echo "Type the tag message:"
-    echo "# example: \"$(git tag -n9 | head -n 1 | awk '{for(i=2;i<=NF;++i)printf $i FS}')\""
-    read -e tagmsg
-    echo "Typed: \"$tagmsg\""
-    if [ ! -z "$tagmsg"  -a "$tagmsg" != " " ]; then
-        TAG_MSG=$tagmsg
-    else
-        echo "Tag message missing"
-        exit 0
+    read -r -p "Do you want to tag? [Y/n] " response
+    response=${response,,} # tolower
+    if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+        echo "# TAG MESSAGE"
+        echo "# Example: \"$(git tag -n9 | head -n 1 | awk '{for(i=2;i<=NF;++i)printf $i FS}')\""
+        tagMsgPrefixSuggestion="$(tr '[:lower:]' '[:upper:]' <<< ${TAG_NAME:0:1})${TAG_NAME:1}"
+        echo "Type the tag message prefix [$tagMsgPrefixSuggestion - ]:"
+        read -e tagMsgPrefix
+        if [ -z "$tagMsgPrefix"  -a "$tagMsgPrefix" != " " ]; then
+            tagMsgPrefix=$tagMsgPrefixSuggestion
+        fi
+
+        echo "Type the tag message:"
+        read -e tagmsg
+        if [ ! -z "$tagmsg"  -a "$tagmsg" != " " ]; then
+            TAG_MSG="$tagMsgPrefix - $tagmsg"
+        else
+            echo "Tag message missing"
+            exit 0
+        fi
     fi
 else
     # Verify if param --tag-msg is set && message param is not empty
@@ -50,13 +69,14 @@ else
 fi
 
 echo "---------------------------------------------"
-echo "Branch to deploy will be: \"$GIT_BRANCH\""
-echo "Tag will be: [name]= \"$TAG_NAME\", [msg]= \"$TAG_MSG\""
+echo "Branch: \"$GIT_BRANCH\""
+echo "---------------------------------------------"
+echo "Tag:    [name]= \"$TAG_NAME\" || [msg]= \"$TAG_MSG\""
 echo "---------------------------------------------"
 
-read -r -p "Are you sure? [y/N] " response
-if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
-then
+read -r -p "Are you sure? [Y/n] " response
+response=${response,,} # tolower
+if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
     echo "---------------------------------------------"
     echo "Deploying..."
     git add notes.md && git commit -m "docs: update notes"
