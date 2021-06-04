@@ -40,7 +40,7 @@ class SeriesController extends Controller
         );
 
         $users = User::all();
-        foreach ($users as $user) {
+        foreach ($users as $i => $user) {
             $email = new \App\Mail\NovaSerie(
                 $request->nome,
                 $request->qtd_temporadas,
@@ -49,7 +49,12 @@ class SeriesController extends Controller
 
             $email->subject = 'Nova Serie Adicionada!';
 
-            \Illuminate\Support\Facades\Mail::to($user)->queue($email);
+            $multiplicador = $i + 1;
+            $quando = now()->addSecond($multiplicador * 10);
+            \Illuminate\Support\Facades\Mail::to($user)->later(
+                $quando,
+                $email
+            );
         }
 
         $request->session()
