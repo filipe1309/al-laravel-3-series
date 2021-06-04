@@ -17,7 +17,7 @@ confirm() {
     read -r -p "Are you sure? [Y/n] " response
     response=${response,,} # tolower
     if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
-        echo "FOI"
+        echo "TAG"
     else
         exit 0;
     fi
@@ -59,6 +59,7 @@ if [ $# -eq 0 ]; then
             echo "Tag message missing"
             exit 0
         fi
+        git tag -a $TAG_NAME -m "$TAG_MSG"
     fi
 else
     # Verify if param --tag-msg is set && message param is not empty
@@ -66,6 +67,7 @@ else
         echo "Wrong tag param"
         exit 0
     fi
+    git tag -a $TAG_NAME -m "$TAG_MSG"
 fi
 
 echo "---------------------------------------------"
@@ -80,7 +82,7 @@ if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
     echo "---------------------------------------------"
     echo "Deploying..."
     git add notes.md && git commit -m "docs: update notes"
-    git tag -a $TAG_NAME -m "$TAG_MSG" && git push origin $GIT_BRANCH && git push origin $GIT_BRANCH --tags && git checkout main
+    git push origin $GIT_BRANCH && git push origin $GIT_BRANCH --tags && git checkout main
     confirm "Pull from repo? [y/N]" && git pl
     echo "Deploy completed!"
 else
