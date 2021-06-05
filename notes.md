@@ -67,3 +67,11 @@ docker-compose exec app php artisan queue:retry 1
 
 docker-compose exec app php artisan queue:listen --tries=2 --delay=5
 ```
+
+## Class 4
+
+```sh
+docker-compose exec app php artisan make:event NovaSerie
+docker-compose exec app php artisan make:listener EnviarEmailNovaSerieCadastrada -e NovaSerie
+docker-compose exec app php artisan make:listener LogNovaSerieCadastrada -e NovaSerie
+```
