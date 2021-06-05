@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\{Serie, Temporada, Episodio};
 use App\Events\SerieApagada;
+use App\Jobs\ExcluirCapaSerie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,8 +21,12 @@ class RemovedorDeSerie
             $this->removerTemporadas($serie);
             $serie->delete();
 
+            // Event
             $evento = new SerieApagada($serieObj);
             event($evento);
+
+            // Job
+            ExcluirCapaSerie::dispatch($serieObj);
         });
 
         return $nomeSerie;

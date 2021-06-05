@@ -26,10 +26,10 @@ class EventServiceProvider extends ServiceProvider
         NovaSerie::class => [
             EnviarEmailNovaSerieCadastrada::class,
             LogNovaSerieCadastrada::class
-        ],
+        ]/*,
         SerieApagada::class => [
             ExcluirCapaSerie::class,
-        ]
+        ]*/
     ];
 
     /**
