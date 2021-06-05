@@ -17,7 +17,7 @@ confirm() {
     read -r -p "Are you sure? [Y/n] " response
     response=${response,,} # tolower
     if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
-        echo "TAG"
+        echo "Ok"
     else
         exit 0;
     fi

@@ -26,6 +26,8 @@ docker-compose exec app php artisan db:seed
 ## Class 1
 
 ```sh
+docker-compose exec app php artisan serve
+
 docker-compose exec app php artisan make:mail NovaSerie
 ```
 
@@ -74,4 +76,17 @@ docker-compose exec app php artisan queue:listen --tries=2 --delay=5
 docker-compose exec app php artisan make:event NovaSerie
 docker-compose exec app php artisan make:listener EnviarEmailNovaSerieCadastrada -e NovaSerie
 docker-compose exec app php artisan make:listener LogNovaSerieCadastrada -e NovaSerie
+```
+
+## Class 5
+
+```sh
+docker-compose exec app php artisan make:migration --table=series adiciona_campo_capa_na_serie
+docker-compose exec app php artisan migrate
+
+docker-compose exec app php artisan tinker
+>>> \App\Serie::all();
+
+docker-compose exec app php artisan storage:link
+http://localhost:5002/storage/serie/ZFB9eYk5LZr4O2Mh0P7U6yitpuLkntxwZEq3gOdS.jpg
 ```
