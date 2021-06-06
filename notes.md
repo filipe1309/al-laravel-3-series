@@ -118,3 +118,23 @@ docker-compose exec app php artisan queue:work --tries=1
 ## CLASS-7
 
 ## CLASS-7
+
+## CLASS-7
+
+## CLASS-7
+
+## CLASS-7
+
+## CLASS-7
+
+## CLASS-7
+
+## CLASS-7
+
+## CLASS-7
+
+## CLASS-7
+
+## CLASS-7
+
+## CLASS-7
