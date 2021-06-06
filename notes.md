@@ -90,3 +90,31 @@ docker-compose exec app php artisan tinker
 docker-compose exec app php artisan storage:link
 http://localhost:5002/storage/serie/ZFB9eYk5LZr4O2Mh0P7U6yitpuLkntxwZEq3gOdS.jpg
 ```
+
+## Class 6
+
+```sh
+docker-compose exec app php artisan make:event SerieApagada
+docker-compose exec app php artisan make:listener -e SerieApagada ExcluirCapaSerie
+
+docker-compose exec app php artisan tinker
+>>> \DB::select('SELECT * FROM jobs');
+>>> \DB::delete('DELETE FROM jobs');
+>>> \DB::select('SELECT * FROM failed_jobs');
+>>> \DB::delete('DELETE FROM failed_jobs');
+
+docker-compose exec app php artisan queue:listen --tries=1
+```
+
+```sh
+docker-compose exec app php artisan make:job ExcluirCapaSerie
+
+docker-compose exec app php artisan tinker
+>>> \DB::select('SELECT * FROM jobs');
+
+docker-compose exec app php artisan queue:work --tries=1
+```
+
+## CLASS-7
+
+## CLASS-7
